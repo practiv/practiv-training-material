@@ -12,3 +12,8 @@ kubectl get pods
 ```bash
 kubectl logs -f pod/flask-app
 ```
+
+# port-forward to pod
+```
+kubectl port-forward pod/flask-app 8081:8080
+```
