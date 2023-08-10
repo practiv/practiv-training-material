@@ -1,0 +1,32 @@
+graph TB
+
+    User-->|Pushes code|Branch
+    Branch-->|Opens PR|PullRequest
+    PullRequest-->|Triggers Jenkins build|JenkinsBuild1[Build & Test on Jenkins]
+    JenkinsBuild1-->|On Success|Check[Check appears on Github]
+    Check-->|Review and Merge to main|MainBranch
+    MainBranch-->|Triggers Jenkins build|JenkinsBuild2[Build, Test & Create Docker Image on Jenkins]
+    JenkinsBuild2-->|Push Docker image to artifact repository|ArtifactRepo
+    ArtifactRepo-->|Release to delivery|Delivery
+    Delivery-->|E2E Tests|DeliveryTest
+    DeliveryTest-->|On Success|ReleaseTest
+    DeliveryTest-->|On Failure|FailureDelivery[Delivery E2E Tests Failed]
+    ReleaseTest-->|Release to test|TestEnv
+    TestEnv-->|E2E Tests|TestEnvTest
+    TestEnvTest-->|On Success|ReleaseUAT
+    TestEnvTest-->|On Failure|FailureTest[Test Env E2E Tests Failed]
+    ReleaseUAT-->|Release to UAT|UATEnv
+    UATEnv-->|E2E Tests|UATEnvTest
+    UATEnvTest-->|On Success|ReleaseProd
+    UATEnvTest-->|On Failure|FailureUAT[UAT E2E Tests Failed]
+    ReleaseProd-->|Release to production|ProdEnv
+    ProdEnv-->|E2E Tests|ProdEnvTest
+    ProdEnvTest-->|On Success|Success[Delivery Successful]
+    ProdEnvTest-->|On Failure|FailureProd[Production E2E Tests Failed]
+
+    classDef fail fill:red
+    classDef success fill:green
+    class FailureDelivery,FailureTest,FailureUAT,FailureProd fail
+    class Success success
+
+
