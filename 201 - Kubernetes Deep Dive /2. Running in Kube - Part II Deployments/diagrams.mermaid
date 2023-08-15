@@ -1,0 +1,22 @@
+classDiagram
+    class Pod {
+        + Smallest deployable unit
+        + One or more containers
+    }
+    class Deployment {
+        + Manages replicas of Pods
+        + Auto scaling
+        + Rolling updates
+    }
+    class StatefulSet {
+        + Manages stateful applications
+        + Stable unique network identifiers
+        + Ordered deployment
+    }
+    class CronJob {
+        + Runs Jobs on a schedule
+        + Can create multiple jobs
+    }
+    Pod <|-- Deployment : Manages
+    Pod <|-- StatefulSet : Manages
+    Pod <|-- CronJob : Creates Jobs
