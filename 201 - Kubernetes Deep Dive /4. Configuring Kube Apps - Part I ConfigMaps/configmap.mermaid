@@ -1,0 +1,16 @@
+graph TB
+    subgraph Deployment
+        D[Deployment] --> P[Pod]
+    end
+    subgraph Pod
+        P --> C[Container]
+        P --> V[Volume]
+    end
+    subgraph Volume
+        V --> CM[ConfigMap]
+    end
+    subgraph Container
+        C --> A[App]
+    end
+    CM -- Mounted as volume --> V
+    V -- Accessed as disk --> A

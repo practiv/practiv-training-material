@@ -1,7 +1,7 @@
 import json
-import logging
 
 from flask import Flask
+import logging
 
 app = Flask(__name__)
 
@@ -10,11 +10,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def hello_world():
-    with open('config.json') as config_file:
+    with open('/config/config.json') as config_file:
         data = json.load(config_file)
-    app.logger.info('Received a request.')
-
-    return data['GREETING']
+    app.logger.info('Hello, World! endpoint was reached')
+    return data['greeting_message']
 
 
 if __name__ == '__main__':

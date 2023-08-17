@@ -10,16 +10,28 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def hello_world():
-    with open('config.json') as config_file:
+    with open('/config/config.json') as config_file:
         data = json.load(config_file)
-    with open('api_key.json') as api_key_file:
-        api_key = json.load(api_key_file)
-
-    app.logger.info('Received a request.')
-
-    return f"{data['GREETING']} and the secret API key is {api_key['KEY']}"
+    app.logger.info('Hello, World! endpoint was reached')
+    return data['greeting_message']
 
 
 if __name__ == '__main__':
-    app.logger.info('Starting the application.')
-    app.run(host='0.0.0.0', port=8080)
+    try:
+        with open('/secrets/license.json') as licenseFile:
+            data = json.load(licenseFile)
+    except FileNotFoundError:
+        app.logger.info('License file not present')
+        exit(2)
+
+    key_ = data['license_key']
+    if key_ != 'super secret license key':
+        app.logger.info('License key is incorrect')
+        exit(2)
+
+    app.logger.info('License: ' + key_)
+
+    # Start server
+    port = 8080
+    app.logger.info('Application started. Listening on port %s', port)
+    app.run(host='0.0.0.0', port=port)

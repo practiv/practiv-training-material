@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app-deployment
+  name: flask-app
+
 spec:
   replicas: 3
   selector:
@@ -13,14 +14,14 @@ spec:
         app: flask-app
     spec:
       containers:
-        - name: flask-app
-          image: flask-app:latest
+        - name: flask-container
+          image: flask-app:latest-config
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: config-volume
-              mountPath: /app/config.json
-              subPath: config.json
+            - mountPath: /config/
+              name: config-volume
       volumes:
         - name: config-volume
           configMap:
